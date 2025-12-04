@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Birth Choice Conversation Guide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-lavender: #E8D4F0;
+            --primary-blue: #C8E0F4;
+            --accent-purple: #9B7EBD;
+            --accent-blue: #7BA7BC;
+            --text-dark: #2D3142;
+            --text-medium: #4F5D75;
+            --background: #FAF8F4;
+            --white: #FFFFFF;
+            --border: #E3DFD8;
+        }
+
+        body {
+            font-family: 'Nunito Sans', sans-serif;
+            background: linear-gradient(135deg, var(--background) 0%, #FFF5F8 100%);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, var(--primary-lavender) 0%, var(--primary-blue) 100%);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(155, 126, 189, 0.15);
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.8rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-medium);
+            font-weight: 300;
+        }
+
+        .intro-section {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 16px;
+            margin-bottom: 40px;
+            border-left: 4px solid var(--accent-purple);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+        }
+
+        .intro-section h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            color: var(--accent-purple);
+            margin-bottom: 20px;
+        }
+
+        .intro-section p {
+            margin-bottom: 16px;
+            color: var(--text-medium);
+            font-size: 1.05rem;
+        }
+
+        .heart-icon {
+            font-size: 2rem;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .section {
+            background: var(--white);
+            padding: 35px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem;
+            color: var(--accent-blue);
+            margin-bottom: 30px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--primary-blue);
+        }
+
+        .question-group {
+            margin-bottom: 35px;
+        }
+
+        .question-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .question-label {
+            display: block;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .options-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .option-item {
+            position: relative;
+        }
+
+        .option-item input[type="radio"],
+        .option-item input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .option-item label {
+            display: inline-block;
+            padding: 10px 20px;
+            background: var(--background);
+            border: 2px solid var(--border);
+            border-radius: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            color: var(--text-medium);
+            font-weight: 400;
+            white-space: nowrap;
+        }
+
+        .option-item input:checked + label {
+            background: linear-gradient(135deg, var(--primary-lavender) 0%, var(--primary-blue) 100%);
+            border-color: var(--accent-purple);
+            color: var(--text-dark);
+            font-weight: 600;
+            transform: scale(1.05);
+        }
+
+        .option-item label:hover {
+            border-color: var(--accent-purple);
+            transform: scale(1.02);
+        }
+
+        .note-text {
+            font-size: 0.9rem;
+            color: var(--text-medium);
+            font-style: italic;
+            margin-top: 8px;
+            opacity: 0.8;
+        }
+
+        .thank-you {
+            background: linear-gradient(135deg, var(--primary-lavender) 0%, var(--primary-blue) 100%);
+            padding: 50px 40px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(155, 126, 189, 0.15);
+        }
+
+        .thank-you h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.2rem;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+        }
+
+        .thank-you p {
+            font-size: 1.1rem;
+            color: var(--text-medium);
+            margin-bottom: 16px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .download-btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 16px 40px;
+            background: var(--accent-purple);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 32px;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(155, 126, 189, 0.3);
+        }
+
+        .download-btn:hover {
+            background: #8B6EAD;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(155, 126, 189, 0.4);
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .btn {
+            padding: 14px 36px;
+            border: none;
+            border-radius: 32px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Nunito Sans', sans-serif;
+        }
+
+        .btn-primary {
+            background: var(--accent-purple);
+            color: var(--white);
+            box-shadow: 0 4px 16px rgba(155, 126, 189, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: #8B6EAD;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(155, 126, 189, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--accent-purple);
+            border: 2px solid var(--accent-purple);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-lavender);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .section {
+                padding: 25px;
+            }
+
+            .options-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .option-item label {
+                display: block;
+                text-align: center;
+                white-space: normal;
+            }
+        }
+
+        /* Smooth page transitions */
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Your Birth Choice Conversation Guide</h1>
+            <p class="subtitle">Deciding About a Vaginal Birth After C-Section (VBAC) or a Repeat C-Section</p>
+        </header>
+
+        <!-- Page 1: Introduction -->
+        <div id="page1" class="page active">
+            <div class="intro-section">
+                <h2>A Message for You</h2>
+                <p>We know that thinking about your birth choices can feel overwhelming, especially when you've had a C-section before. Every person's situation is unique.</p>
+                <p>This guide helps us understand what matters most to you so we can support your decision together. Please share whatever feels comfortable. You can skip any questions that don't feel relevant, and we can always talk more about anything that comes up.</p>
+                <p><strong>Remember: This is your choice, and we're here to support you no matter what you decide.</strong></p>
+                <div class="heart-icon">💜</div>
+                <p style="text-align: center; font-style: italic; margin-top: 20px;">Click Next to start the Survey. First, we will start with questions about your daily home routines.</p>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn btn-primary" onclick="nextPage()">Next</button>
+            </div>
+        </div>
+
+        <!-- Page 2: Living Space -->
+        <div id="page2" class="page">
+            <div class="section">
+                <h2 class="section-title">Your Home: Living Space</h2>
+                
+                <div class="question-group">
+                    <label class="question-label">What type of home do you live in?</label>
+                    <div class="options-container">
+                        <div class="option-item">
+                            <input type="radio" id="home1" name="home-type" value="single">
+                            <label for="home1">Single story home</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="home2" name="home-type" value="multi">
+                            <label for="home2">Multi-story home</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="home3" name="home-type" value="condo">
+                            <label for="home3">Condo</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="home4" name="home-type" value="apartment">
+                            <label for="home4">Apartment</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="home5" name="home-type" value="other">
+                            <label for="home5">Other</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <label class="question-label">To get to other rooms in your home, so that you can cook, do laundry, take care of other children, or relax in your living area, how many flights of stairs do you think you'd need to climb each day?</label>
+                    <div class="options-container">
+                        <div class="option-item">
+                            <input type="radio" id="stairs1" name="stairs" value="none">
+                            <label for="stairs1">None</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="stairs2" name="stairs" value="1">
+                            <label for="stairs2">1 flight</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="stairs3" name="stairs" value="2">
+                            <label for="stairs3">2 flights</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="stairs4" name="stairs" value="3+">
+                            <label for="stairs4">3+ flights</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="prevPage()">Previous</button>
+                <button class="btn btn-primary" onclick="nextPage()">Next</button>
+            </div>
+        </div>
+
+        <!-- Page 3: Daily Tasks -->
+        <div id="page3" class="page">
+            <div class="section">
+                <h2 class="section-title">Your Home: Daily Tasks</h2>
+                
+                <div class="question-group">
+                    <label class="question-label">What household tasks do you usually handle? (Check all that apply)</label>
+                    <div class="options-container">
+                        <div class="option-item">
+                            <input type="checkbox" id="task1" name="tasks" value="cooking">
+                            <label for="task1">Tasks at home like cooking, cleaning, and laundry</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="checkbox" id="task2" name="tasks" value="childcare">
+                            <label for="task2">Tasks like caring for children</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="checkbox" id="task3" name="tasks" value="errands">
+                            <label for="task3">Tasks outside of the home, like grocery shopping and running errands</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="checkbox" id="task4" name="tasks" value="outdoor">
+                            <label for="task4">Tasks outdoors like gardening and yard work</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <label class="question-label">Do you regularly do tasks that require heavy lifting, bending/stooping, reaching overhead, carrying other children, or being on the floor?</label>
+                    <div class="options-container">
+                        <div class="option-item">
+                            <input type="radio" id="lift1" name="lifting" value="often">
+                            <label for="lift1">Yes, often</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="lift2" name="lifting" value="not-often">
+                            <label for="lift2">Yes, but not often</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="lift3" name="lifting" value="with-help">
+                            <label for="lift3">Yes, but I have help whenever I need it</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="prevPage()">Previous</button>
+                <button class="btn btn-primary" onclick="nextPage()">Next</button>
+            </div>
+        </div>
+
+        <!-- Page 4: Home Setup -->
+        <div id="page4" class="page">
+            <div class="section">
+                <h2 class="section-title">Your Home: Home Setup and Getting Around</h2>
+                
+                <div class="question-group">
+                    <label class="question-label">What kind of bathroom setup do you have?</label>
+                    <div class="options-container">
+                        <div class="option-item">
+                            <input type="radio" id="bath1" name="bathroom" value="walk-in">
+                            <label for="bath1">Walk-in Shower</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="bath2" name="bathroom" value="combo">
+                            <label for="bath2">Tub/shower combo</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="bath3" name="bathroom" value="tub">
+                            <label for="bath3">Tub Only</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="bath4" name="bathroom" value="multiple">
+                            <label for="bath4">Multiple bathroom options</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <label class="question-label">What type of bed do you have?</label>
+                    <div class="options-container">
+                        <div class="option-item">
+                            <input type="radio" id="bed1" name="bed" value="regular-firm">
+                            <label for="bed1">Regular height, firm</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="bed2" name="bed" value="regular-soft">
+                            <label for="bed2">Regular height, soft</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="bed3" name="bed" value="high">
+                            <label for="bed3">High bed</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="bed4" name="bed" value="low">
+                            <label for="bed4">Low Bed</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="bed5" name="bed" value="adjustable">
+                            <label for="bed5">Adjustable bed</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <label class="question-label">Do you have a place where you can recover in comfort (with chairs, pillows, etc.)?</label>
+                    <div class="options-container">
+                        <div class="option-item">
+                            <input type="radio" id="comfort1" name="comfort" value="very">
+                            <label for="comfort1">Yes, very comfortable</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="comfort2" name="comfort" value="adequate">
+                            <label for="comfort2">Yes, adequate</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="comfort3" name="comfort" value="limited">
+                            <label for="comfort3">Somewhat limited</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="comfort4" name="comfort" value="very-limited">
+                            <label for="comfort4">Very limited</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <label class="question-label">How easy is it to reach frequently used items in your home?</label>
+                    <div class="options-container">
+                        <div class="option-item">
+                            <input type="radio" id="reach1" name="reach" value="easy">
+                            <label for="reach1">Everything is in easy reach</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="reach2" name="reach" value="most">
+                            <label for="reach2">Most things are reachable</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="reach3" name="reach" value="some">
+                            <label for="reach3">Some items hard to reach</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="reach4" name="reach" value="many">
+                            <label for="reach4">Many items hard to reach</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="prevPage()">Previous</button>
+                <button class="btn btn-primary" onclick="nextPage()">Next</button>
+            </div>
+        </div>
+
+        <!-- Page 5: Equipment and Support -->
+        <div id="page5" class="page">
+            <div class="section">
+                <h2 class="section-title">Equipment and Support</h2>
+                
+                <div class="question-group">
+                    <label class="question-label">Do you have or can you get helpful equipment? (Check all that apply)</label>
+                    <div class="options-container">
+                        <div class="option-item">
+                            <input type="checkbox" id="equip1" name="equipment" value="toilet">
+                            <label for="equip1">Raised toilet seat</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="checkbox" id="equip2" name="equipment" value="chair">
+                            <label for="equip2">Shower chair</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="checkbox" id="equip3" name="equipment" value="grabber">
+                            <label for="equip3">Grabber/reacher tools</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="checkbox" id="equip4" name="equipment" value="stool">
+                            <label for="equip4">Step stool</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="checkbox" id="equip5" name="equipment" value="none">
+                            <label for="equip5">None needed</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <label class="question-label">Can your home accommodate helpers/visitors during your recovery?</label>
+                    <div class="options-container">
+                        <div class="option-item">
+                            <input type="radio" id="helper1" name="helpers" value="planned">
+                            <label for="helper1">Yes, already planned</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="helper2" name="helpers" value="considering">
+                            <label for="helper2">Yes, considering some</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="helper3" name="helpers" value="not-thought">
+                            <label for="helper3">Haven't thought about it yet</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="helper4" name="helpers" value="none">
+                            <label for="helper4">None are needed</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <label class="question-label">Are you planning any home changes for recovery?</label>
+                    <div class="options-container">
+                        <div class="option-item">
+                            <input type="radio" id="changes1" name="changes" value="planned">
+                            <label for="changes1">Yes, already planned</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="changes2" name="changes" value="considering">
+                            <label for="changes2">Yes, considering some</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="changes3" name="changes" value="not-thought">
+                            <label for="changes3">Haven't thought about it yet</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="changes4" name="changes" value="none">
+                            <label for="changes4">None are needed</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <label class="question-label">Could you afford temporary household help if needed?</label>
+                    <div class="options-container">
+                        <div class="option-item">
+                            <input type="radio" id="afford1" name="afford" value="easily">
+                            <label for="afford1">Yes, easily affordable</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="afford2" name="afford" value="tight">
+                            <label for="afford2">Yes, tight budget</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="afford3" name="afford" value="maybe">
+                            <label for="afford3">Maybe briefly</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" id="afford4" name="afford" value="not">
+                            <label for="afford4">Not affordable</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <label class="question-label">Which services might you consider? (Check all that apply)</label>
+                    <div class="options-container">
+                        <div class="option-item">
+                            <input type="checkbox" id="service1" name="services" value="cleaning">
+                            <label for="service1">House cleaning</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="checkbox" id="service2" name="services" value="grocery">
+                            <label for="service2">Grocery delivery</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="checkbox" id="service3" name="services" value="meal">
+                            <label for="service3">Meal preparation</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="checkbox" id="service4" name="services" value="childcare">
+                            <label for="service4">Childcare</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="checkbox" id="service5" name="services" value="none">
+                            <label for="service5">None affordable</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="prevPage()">Previous</button>
+                <button class="btn btn-primary" onclick="nextPage()">Next</button>
+            </div>
+        </div>
+
+        <!-- Page 6: Thank You -->
+        <div id="page6" class="page">
+            <div class="thank-you">
+                <h2>Thank You</h2>
+                <div class="heart-icon">💙</div>
+                <p>Thank you for taking the time to share all of this with us. Every detail you've provided helps us understand what matters most to you and your family.</p>
+                <p>Remember, there's no rush to make this decision, and it's completely normal to have mixed feelings. We're here to support you through this process, answer any questions that come up, and respect whatever choice feels right for you.</p>
+                <p><strong>Your birth experience is important, and so are you.</strong> Let's work together to make sure you feel confident and supported in whatever path you choose.</p>
+                <p style="margin-top: 25px; font-size: 1rem; font-weight: 600;">Please download the PDF below for your review, then you may close this window.</p>
+                <a href="#" class="download-btn" onclick="generatePDF(); return false;">Download Your Personalized Report (PDF)</a>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="prevPage()">Previous</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        let currentPage = 1;
+        const totalPages = 6;
+
+        function showPage(pageNum) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById('page' + pageNum).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        function nextPage() {
+            if (currentPage < totalPages) {
+                currentPage++;
+                showPage(currentPage);
+            }
+        }
+
+        function prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                showPage(currentPage);
+            }
+        }
+
+        function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Set up fonts and colors
+            let yPosition = 20;
+            const lineHeight = 7;
+            const pageWidth = doc.internal.pageSize.width;
+            const margin = 20;
+            const maxWidth = pageWidth - (2 * margin);
+            
+            // Title
+            doc.setFontSize(18);
+            doc.setFont(undefined, 'bold');
+            doc.text('Your Birth Choice Conversation Guide', margin, yPosition);
+            yPosition += 10;
+            
+            doc.setFontSize(12);
+            doc.setFont(undefined, 'normal');
+            doc.text('Personalized Report', margin, yPosition);
+            yPosition += 15;
+            
+            // Collect all responses
+            const responses = [];
+            
+            // Home Type
+            const homeType = document.querySelector('input[name="home-type"]:checked');
+            if (homeType) {
+                responses.push({
+                    question: 'What type of home do you live in?',
+                    answer: homeType.nextElementSibling.textContent
+                });
+            }
+            
+            // Stairs
+            const stairs = document.querySelector('input[name="stairs"]:checked');
+            if (stairs) {
+                responses.push({
+                    question: 'Flights of stairs per day',
+                    answer: stairs.nextElementSibling.textContent
+                });
+            }
+            
+            // Tasks
+            const tasks = Array.from(document.querySelectorAll('input[name="tasks"]:checked'))
+                .map(cb => cb.nextElementSibling.textContent);
+            if (tasks.length > 0) {
+                responses.push({
+                    question: 'Household tasks you handle',
+                    answer: tasks.join(', ')
+                });
+            }
+            
+            // Lifting
+            const lifting = document.querySelector('input[name="lifting"]:checked');
+            if (lifting) {
+                responses.push({
+                    question: 'Tasks requiring heavy lifting/bending',
+                    answer: lifting.nextElementSibling.textContent
+                });
+            }
+            
+            // Bathroom
+            const bathroom = document.querySelector('input[name="bathroom"]:checked');
+            if (bathroom) {
+                responses.push({
+                    question: 'Bathroom setup',
+                    answer: bathroom.nextElementSibling.textContent
+                });
+            }
+            
+            // Bed
+            const bed = document.querySelector('input[name="bed"]:checked');
+            if (bed) {
+                responses.push({
+                    question: 'Type of bed',
+                    answer: bed.nextElementSibling.textContent
+                });
+            }
+            
+            // Comfort
+            const comfort = document.querySelector('input[name="comfort"]:checked');
+            if (comfort) {
+                responses.push({
+                    question: 'Recovery space comfort',
+                    answer: comfort.nextElementSibling.textContent
+                });
+            }
+            
+            // Reach
+            const reach = document.querySelector('input[name="reach"]:checked');
+            if (reach) {
+                responses.push({
+                    question: 'Ease of reaching items',
+                    answer: reach.nextElementSibling.textContent
+                });
+            }
+            
+            // Equipment
+            const equipment = Array.from(document.querySelectorAll('input[name="equipment"]:checked'))
+                .map(cb => cb.nextElementSibling.textContent);
+            if (equipment.length > 0) {
+                responses.push({
+                    question: 'Helpful equipment available',
+                    answer: equipment.join(', ')
+                });
+            }
+            
+            // Helpers
+            const helpers = document.querySelector('input[name="helpers"]:checked');
+            if (helpers) {
+                responses.push({
+                    question: 'Home can accommodate helpers/visitors',
+                    answer: helpers.nextElementSibling.textContent
+                });
+            }
+            
+            // Changes
+            const changes = document.querySelector('input[name="changes"]:checked');
+            if (changes) {
+                responses.push({
+                    question: 'Planning home changes for recovery',
+                    answer: changes.nextElementSibling.textContent
+                });
+            }
+            
+            // Afford
+            const afford = document.querySelector('input[name="afford"]:checked');
+            if (afford) {
+                responses.push({
+                    question: 'Can afford temporary household help',
+                    answer: afford.nextElementSibling.textContent
+                });
+            }
+            
+            // Services
+            const services = Array.from(document.querySelectorAll('input[name="services"]:checked'))
+                .map(cb => cb.nextElementSibling.textContent);
+            if (services.length > 0) {
+                responses.push({
+                    question: 'Services you might consider',
+                    answer: services.join(', ')
+                });
+            }
+            
+            // Add responses to PDF
+            doc.setFontSize(11);
+            
+            if (responses.length === 0) {
+                doc.text('No responses recorded yet. Please complete the survey first.', margin, yPosition);
+            } else {
+                responses.forEach((item, index) => {
+                    // Check if we need a new page
+                    if (yPosition > 270) {
+                        doc.addPage();
+                        yPosition = 20;
+                    }
+                    
+                    // Question
+                    doc.setFont(undefined, 'bold');
+                    const questionLines = doc.splitTextToSize(item.question, maxWidth);
+                    doc.text(questionLines, margin, yPosition);
+                    yPosition += questionLines.length * lineHeight;
+                    
+                    // Answer
+                    doc.setFont(undefined, 'normal');
+                    const answerLines = doc.splitTextToSize(item.answer, maxWidth);
+                    doc.text(answerLines, margin, yPosition);
+                    yPosition += answerLines.length * lineHeight + 5;
+                });
+                
+                // Add footer
+                if (yPosition > 250) {
+                    doc.addPage();
+                    yPosition = 20;
+                }
+                yPosition += 10;
+                doc.setFontSize(10);
+                doc.setFont(undefined, 'italic');
+                const footerText = doc.splitTextToSize('Remember: This is your choice, and we\'re here to support you no matter what you decide. Please review this report with your partner, family, and healthcare provider.', maxWidth);
+                doc.text(footerText, margin, yPosition);
+            }
+            
+            // Save the PDF
+            doc.save('Birth-Choice-Personalized-Report.pdf');
+        }
+
+        // Initialize
+        showPage(1);
+    </script>
+</body>
+</html>
