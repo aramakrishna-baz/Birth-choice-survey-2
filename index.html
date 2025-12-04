@@ -693,6 +693,9 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
+        // CONFIGURATION: Add your Google Apps Script URL here
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxx0LdDpKVPMr2hrSSquqdaRYs-bMLd0ZPdPAsGrTyuxKADbT5Q1wRwt2y2P7JxY2qO3Q/exec';
+        
         let currentPage = 1;
         const totalPages = 6;
 
@@ -716,6 +719,59 @@
                 currentPage--;
                 showPage(currentPage);
             }
+        }
+
+        function collectSurveyData() {
+            const data = {
+                timestamp: new Date().toISOString(),
+                homeType: getRadioValue('home-type'),
+                stairs: getRadioValue('stairs'),
+                tasks: getCheckboxValues('tasks'),
+                lifting: getRadioValue('lifting'),
+                bathroom: getRadioValue('bathroom'),
+                bed: getRadioValue('bed'),
+                comfort: getRadioValue('comfort'),
+                reach: getRadioValue('reach'),
+                equipment: getCheckboxValues('equipment'),
+                helpers: getRadioValue('helpers'),
+                changes: getRadioValue('changes'),
+                afford: getRadioValue('afford'),
+                services: getCheckboxValues('services')
+            };
+            return data;
+        }
+
+        function getRadioValue(name) {
+            const selected = document.querySelector(`input[name="${name}"]:checked`);
+            return selected ? selected.nextElementSibling.textContent : '';
+        }
+
+        function getCheckboxValues(name) {
+            const checked = Array.from(document.querySelectorAll(`input[name="${name}"]:checked`))
+                .map(cb => cb.nextElementSibling.textContent);
+            return checked.join(', ');
+        }
+
+        function sendToGoogleSheets(data) {
+            if (GOOGLE_SCRIPT_URL === 'YOUR_SCRIPT_URL_HERE') {
+                console.log('Google Sheets not configured yet. Data:', data);
+                return Promise.resolve();
+            }
+
+            return fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(() => {
+                console.log('Data sent to Google Sheets successfully');
+            })
+            .catch(error => {
+                console.error('Error sending to Google Sheets:', error);
+            });
         }
 
         function generatePDF() {
@@ -903,6 +959,10 @@
             
             // Save the PDF
             doc.save('Birth-Choice-Personalized-Report.pdf');
+            
+            // Send data to Google Sheets
+            const surveyData = collectSurveyData();
+            sendToGoogleSheets(surveyData);
         }
 
         // Initialize
