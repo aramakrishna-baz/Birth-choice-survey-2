@@ -325,6 +325,12 @@
                 <p>This guide helps us understand what matters most to you so we can support your decision together. Please share whatever feels comfortable. You can skip any questions that don't feel relevant, and we can always talk more about anything that comes up.</p>
                 <p><strong>Remember: This is your choice, and we're here to support you no matter what you decide.</strong></p>
                 <div class="heart-icon">💜</div>
+                
+                <div style="margin-top: 30px; padding: 25px; background: var(--background); border-radius: 12px; border: 2px solid var(--border);">
+                    <label for="respondent-name" style="display: block; font-weight: 600; margin-bottom: 10px; color: var(--text-dark);">Before we begin, please enter your name:</label>
+                    <input type="text" id="respondent-name" name="respondent-name" placeholder="Your name" required style="width: 100%; padding: 12px 16px; border: 2px solid var(--border); border-radius: 8px; font-size: 1rem; font-family: 'Nunito Sans', sans-serif;">
+                </div>
+                
                 <p style="text-align: center; font-style: italic; margin-top: 20px;">Click Next to start the Survey. First, we will start with questions about your daily home routines.</p>
             </div>
             <div class="nav-buttons">
@@ -694,7 +700,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
         // CONFIGURATION: Add your Google Apps Script URL here
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxx0LdDpKVPMr2hrSSquqdaRYs-bMLd0ZPdPAsGrTyuxKADbT5Q1wRwt2y2P7JxY2qO3Q/exec';
+        const GOOGLE_SCRIPT_URL = 'YOUR_SCRIPT_URL_HERE';
         
         let currentPage = 1;
         const totalPages = 6;
@@ -708,6 +714,16 @@
         }
 
         function nextPage() {
+            // Validate name on first page
+            if (currentPage === 1) {
+                const nameInput = document.getElementById('respondent-name');
+                if (!nameInput.value.trim()) {
+                    alert('Please enter your name before continuing.');
+                    nameInput.focus();
+                    return;
+                }
+            }
+            
             if (currentPage < totalPages) {
                 currentPage++;
                 showPage(currentPage);
@@ -724,6 +740,7 @@
         function collectSurveyData() {
             const data = {
                 timestamp: new Date().toISOString(),
+                name: document.getElementById('respondent-name').value.trim(),
                 homeType: getRadioValue('home-type'),
                 stairs: getRadioValue('stairs'),
                 tasks: getCheckboxValues('tasks'),
@@ -794,6 +811,23 @@
             doc.setFontSize(12);
             doc.setFont(undefined, 'normal');
             doc.text('Personalized Report', margin, yPosition);
+            yPosition += 8;
+            
+            // Add respondent name
+            const respondentName = document.getElementById('respondent-name').value.trim();
+            if (respondentName) {
+                doc.setFont(undefined, 'bold');
+                doc.text('Respondent: ' + respondentName, margin, yPosition);
+                yPosition += 8;
+            }
+            
+            doc.setFont(undefined, 'normal');
+            const dateStr = new Date().toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            doc.text('Date: ' + dateStr, margin, yPosition);
             yPosition += 15;
             
             // Collect all responses
