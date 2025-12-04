@@ -108,9 +108,17 @@
             font-family: 'Cormorant Garamond', serif;
             font-size: 1.6rem;
             color: var(--accent-blue);
-            margin-bottom: 30px;
+            margin-bottom: 10px;
             padding-bottom: 12px;
             border-bottom: 2px solid var(--primary-blue);
+        }
+        
+        .required-note {
+            font-size: 0.9rem;
+            color: var(--accent-purple);
+            font-style: italic;
+            margin-bottom: 25px;
+            font-weight: 600;
         }
 
         .question-group {
@@ -128,6 +136,12 @@
             color: var(--text-dark);
             margin-bottom: 16px;
             line-height: 1.5;
+        }
+        
+        .question-label::after {
+            content: " *";
+            color: var(--accent-purple);
+            font-weight: bold;
         }
 
         .options-container {
@@ -325,6 +339,12 @@
                 <p>This guide helps us understand what matters most to you so we can support your decision together. Please share whatever feels comfortable. You can skip any questions that don't feel relevant, and we can always talk more about anything that comes up.</p>
                 <p><strong>Remember: This is your choice, and we're here to support you no matter what you decide.</strong></p>
                 <div class="heart-icon">💜</div>
+                
+                <div style="margin-top: 30px; padding: 25px; background: var(--background); border-radius: 12px; border: 2px solid var(--border);">
+                    <label for="respondent-name" style="display: block; font-weight: 600; margin-bottom: 10px; color: var(--text-dark);">Before we begin, please enter your name:</label>
+                    <input type="text" id="respondent-name" name="respondent-name" placeholder="Your name" required style="width: 100%; padding: 12px 16px; border: 2px solid var(--border); border-radius: 8px; font-size: 1rem; font-family: 'Nunito Sans', sans-serif;">
+                </div>
+                
                 <p style="text-align: center; font-style: italic; margin-top: 20px;">Click Next to start the Survey. First, we will start with questions about your daily home routines.</p>
             </div>
             <div class="nav-buttons">
@@ -336,6 +356,7 @@
         <div id="page2" class="page">
             <div class="section">
                 <h2 class="section-title">Your Home: Living Space</h2>
+                <p class="required-note">* All questions are required</p>
                 
                 <div class="question-group">
                     <label class="question-label">What type of home do you live in?</label>
@@ -395,6 +416,7 @@
         <div id="page3" class="page">
             <div class="section">
                 <h2 class="section-title">Your Home: Daily Tasks</h2>
+                <p class="required-note">* All questions are required</p>
                 
                 <div class="question-group">
                     <label class="question-label">What household tasks do you usually handle? (Check all that apply)</label>
@@ -446,6 +468,7 @@
         <div id="page4" class="page">
             <div class="section">
                 <h2 class="section-title">Your Home: Home Setup and Getting Around</h2>
+                <p class="required-note">* All questions are required</p>
                 
                 <div class="question-group">
                     <label class="question-label">What kind of bathroom setup do you have?</label>
@@ -549,6 +572,7 @@
         <div id="page5" class="page">
             <div class="section">
                 <h2 class="section-title">Equipment and Support</h2>
+                <p class="required-note">* All questions are required</p>
                 
                 <div class="question-group">
                     <label class="question-label">Do you have or can you get helpful equipment? (Check all that apply)</label>
@@ -693,6 +717,9 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
+        // CONFIGURATION: Add your Google Apps Script URL here
+        const GOOGLE_SCRIPT_URL = 'YOUR_SCRIPT_URL_HERE';
+        
         let currentPage = 1;
         const totalPages = 6;
 
@@ -705,6 +732,84 @@
         }
 
         function nextPage() {
+            // Validate name on first page
+            if (currentPage === 1) {
+                const nameInput = document.getElementById('respondent-name');
+                if (!nameInput.value.trim()) {
+                    alert('Please enter your name before continuing.');
+                    nameInput.focus();
+                    return;
+                }
+            }
+            
+            // Validate page 2 - Living Space
+            if (currentPage === 2) {
+                if (!document.querySelector('input[name="home-type"]:checked')) {
+                    alert('Please answer: What type of home do you live in?');
+                    return;
+                }
+                if (!document.querySelector('input[name="stairs"]:checked')) {
+                    alert('Please answer: How many flights of stairs do you climb each day?');
+                    return;
+                }
+            }
+            
+            // Validate page 3 - Daily Tasks
+            if (currentPage === 3) {
+                if (!document.querySelector('input[name="tasks"]:checked')) {
+                    alert('Please select at least one household task.');
+                    return;
+                }
+                if (!document.querySelector('input[name="lifting"]:checked')) {
+                    alert('Please answer: Do you regularly do tasks that require heavy lifting?');
+                    return;
+                }
+            }
+            
+            // Validate page 4 - Home Setup
+            if (currentPage === 4) {
+                if (!document.querySelector('input[name="bathroom"]:checked')) {
+                    alert('Please answer: What kind of bathroom setup do you have?');
+                    return;
+                }
+                if (!document.querySelector('input[name="bed"]:checked')) {
+                    alert('Please answer: What type of bed do you have?');
+                    return;
+                }
+                if (!document.querySelector('input[name="comfort"]:checked')) {
+                    alert('Please answer: Do you have a place where you can recover in comfort?');
+                    return;
+                }
+                if (!document.querySelector('input[name="reach"]:checked')) {
+                    alert('Please answer: How easy is it to reach frequently used items?');
+                    return;
+                }
+            }
+            
+            // Validate page 5 - Equipment and Support
+            if (currentPage === 5) {
+                if (!document.querySelector('input[name="equipment"]:checked')) {
+                    alert('Please select at least one equipment option (or "None needed").');
+                    return;
+                }
+                if (!document.querySelector('input[name="helpers"]:checked')) {
+                    alert('Please answer: Can your home accommodate helpers/visitors?');
+                    return;
+                }
+                if (!document.querySelector('input[name="changes"]:checked')) {
+                    alert('Please answer: Are you planning any home changes for recovery?');
+                    return;
+                }
+                if (!document.querySelector('input[name="afford"]:checked')) {
+                    alert('Please answer: Could you afford temporary household help?');
+                    return;
+                }
+                if (!document.querySelector('input[name="services"]:checked')) {
+                    alert('Please select at least one service option (or "None affordable").');
+                    return;
+                }
+            }
+            
             if (currentPage < totalPages) {
                 currentPage++;
                 showPage(currentPage);
@@ -716,6 +821,60 @@
                 currentPage--;
                 showPage(currentPage);
             }
+        }
+
+        function collectSurveyData() {
+            const data = {
+                timestamp: new Date().toISOString(),
+                name: document.getElementById('respondent-name').value.trim(),
+                homeType: getRadioValue('home-type'),
+                stairs: getRadioValue('stairs'),
+                tasks: getCheckboxValues('tasks'),
+                lifting: getRadioValue('lifting'),
+                bathroom: getRadioValue('bathroom'),
+                bed: getRadioValue('bed'),
+                comfort: getRadioValue('comfort'),
+                reach: getRadioValue('reach'),
+                equipment: getCheckboxValues('equipment'),
+                helpers: getRadioValue('helpers'),
+                changes: getRadioValue('changes'),
+                afford: getRadioValue('afford'),
+                services: getCheckboxValues('services')
+            };
+            return data;
+        }
+
+        function getRadioValue(name) {
+            const selected = document.querySelector(`input[name="${name}"]:checked`);
+            return selected ? selected.nextElementSibling.textContent : '';
+        }
+
+        function getCheckboxValues(name) {
+            const checked = Array.from(document.querySelectorAll(`input[name="${name}"]:checked`))
+                .map(cb => cb.nextElementSibling.textContent);
+            return checked.join(', ');
+        }
+
+        function sendToGoogleSheets(data) {
+            if (GOOGLE_SCRIPT_URL === 'YOUR_SCRIPT_URL_HERE') {
+                console.log('Google Sheets not configured yet. Data:', data);
+                return Promise.resolve();
+            }
+
+            return fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(() => {
+                console.log('Data sent to Google Sheets successfully');
+            })
+            .catch(error => {
+                console.error('Error sending to Google Sheets:', error);
+            });
         }
 
         function generatePDF() {
@@ -738,6 +897,23 @@
             doc.setFontSize(12);
             doc.setFont(undefined, 'normal');
             doc.text('Personalized Report', margin, yPosition);
+            yPosition += 8;
+            
+            // Add respondent name
+            const respondentName = document.getElementById('respondent-name').value.trim();
+            if (respondentName) {
+                doc.setFont(undefined, 'bold');
+                doc.text('Respondent: ' + respondentName, margin, yPosition);
+                yPosition += 8;
+            }
+            
+            doc.setFont(undefined, 'normal');
+            const dateStr = new Date().toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            doc.text('Date: ' + dateStr, margin, yPosition);
             yPosition += 15;
             
             // Collect all responses
@@ -903,6 +1079,10 @@
             
             // Save the PDF
             doc.save('Birth-Choice-Personalized-Report.pdf');
+            
+            // Send data to Google Sheets
+            const surveyData = collectSurveyData();
+            sendToGoogleSheets(surveyData);
         }
 
         // Initialize
